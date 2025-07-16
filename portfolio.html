@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula | Roblox Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: rgba(100, 108, 255, 0.8);
+            --secondary: rgba(255, 70, 144, 0.8);
+            --dark: #0f0f1a;
+            --light: rgba(255, 255, 255, 0.9);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-attachment: fixed;
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Glassmorphic Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Header Section */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-link {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            aspect-ratio: 16/9;
+            padding: 8px; /* This creates the gap between image and border */
+            background: rgba(255, 255, 255, 0.1); /* Optional: subtle inner glow */
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); /* Optional: inner border */
+        }
+
+        .project-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px; /* Slightly smaller than card radius */
+            transition: transform 0.5s ease, border-radius 0.3s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.03);
+            border-radius: 6px; /* Optional: subtle change on hover */
+        }
+
+        .project-overlay {
+            position: absolute;
+            bottom: 8px; /* Match the padding */
+            left: 8px; /* Match the padding */
+            right: 8px; /* Match the padding */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            border-radius: 0 0 8px 8px; /* Match image radius */
+        }
+
+        .project-card:hover .project-overlay {
+            transform: translateY(0);
+        }
+        
+        /* Skills Section */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .skill-chip {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-chip:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        /* Contact Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(100, 108, 255, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(100, 108, 255, 0.4);
+        }
+        
+        /* Floating Bubbles (Liquid Effect) */
+        .bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: rise 15s infinite ease-in;
+        }
+        
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-duration: 8s;
+        }
+        
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 5s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 35%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-duration: 11s;
+            animation-delay: 0s;
+        }
+        
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 55%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(6) {
+            width: 45px;
+            height: 45px;
+            left: 65%;
+            animation-duration: 8s;
+            animation-delay: 3s;
+        }
+        
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(8) {
+            width: 80px;
+            height: 80px;
+            left: 80%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+        
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .glass-card {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-status {
+    padding: 0.5rem;
+    border-radius: 4px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* For the button during submission */
+button[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+    </style>
+</head>
+<body>
+    <!-- Floating Bubbles for Liquid Effect -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+    
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <img src="nebula.png" alt="Your Avatar" class="avatar">
+            <h1>Nebula</h1>
+            <p class="tagline">Roblox Developer | UI Designer | Game Creator</p>
+            
+            <div class="social-links">
+                <a href="https://www.roblox.com/users/1334423051/profile" class="social-link">
+                    <i class="fas fa-gamepad"></i>
+                </a> <!-- Roblox -->
+                <a href="https://x.com/ThatNebula_" class="social-link">
+                    <i class="fab fa-twitter"></i>
+                </a> <!-- Twitter -->
+                <a href="https://github.com/ThatNebulaDev" class="social-link">
+                    <i class="fab fa-github"></i>
+                </a> <!-- GitHub -->
+
+            </div>
+        </header>
+        
+        <!-- About Section -->
+        <section class="glass-card">
+            <h2>About Me</h2>
+            <p>Hello! I'm a passionate Roblox developer with multiple years of experience creating immersive games and experiences. I specialize in UI Design and Lua Scripting.</p>
+            <p>My goal is to create engaging, high-quality experiences that players love. I take pride in writing clean, efficient code and designing intuitive user interfaces.</p>
+        </section>
+        
+        <!-- Skills Section -->
+        <section class="glass-card">
+            <h2>Skills</h2>
+            <div class="skills-container">
+                <span class="skill-chip">Lua</span>
+                <span class="skill-chip">JS</span>
+                <span class="skill-chip">HTML</span>
+                <span class="skill-chip">CSS</span>
+                <span class="skill-chip">Verse</span>
+                <span class="skill-chip">Roblox Studio</span>
+                <span class="skill-chip">UI/UX Design</span>
+                <span class="skill-chip">Game Design</span>
+                <span class="skill-chip">Scripting</span>
+                <span class="skill-chip">Team Collaboration</span>
+
+
+            </div>
+        </section>
+        
+        <!-- Projects Section -->
+        <section class="glass-card">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="glass-card project-card">
+                    <img src="MODULAR.png" alt="Project 1" class="project-image">
+                    <div class="project-overlay">
+                        <h3>Modular Code Redeeming</h3>
+                        <p>Code redeeming systeem that can be pasted into any project and would not require to change base code.</p>
+                        <small>10+ Sales</small>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="glass-card project-card">
+                    <img src="ULTRA TRIVIA.png" alt="Project 2" class="project-image">
+                    <div class="project-overlay">
+                        <h3>Mini Trivia Game</h3>
+                        <p>Worked together with another dev to create a simple and fun to play trivia game</p>
+                        <small>10k+ visits</small>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="glass-card project-card">
+                    <img src="CAR QUIZ.webp" alt="Project 3" class="project-image">
+                    <div class="project-overlay">
+                        <h3>Car Quiz</h3>
+                        <p>Assisted creating a car quiz game by fixing bugs and simplifying code.</p>
+                        <small>110k+ visits</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Experience Section -->
+        <section class="glass-card">
+            <h2>Experience</h2>
+            <div style="margin-top: 1.5rem;">
+                <h3>Roblox Developer</h3>
+                <p style="opacity: 0.8; margin-bottom: 0.5rem;">2023 - Present</p>
+                <p>Creating games inside Roblox Studio</p>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <h3>UEFN Developer</h3>
+                <p style="opacity: 0.8; margin-bottom: 0.5rem;">2024 - 2025</p>
+                <p>Creating inside Unreal Engine for Fortnite using Verse</p>
+            </div>
+            
+            <div style="margin-top: 1.5rem;">
+                <h3>Web Developer</h3>
+                <p style="opacity: 0.8; margin-bottom: 0.5rem;">2019 - 2024</p>
+                <p>Creating sites based on HTML, CSS, JS and React</p>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="glass-card">
+            <h2>Get In Touch</h2>
+            <form id="contact-form" action="https://formspree.io/f/mrblgyeo" method="POST">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required placeholder="Your name">
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="your@email.com">
+    </div>
+    
+    <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required placeholder="Your message"></textarea>
+    </div>
+    
+    <button type="submit">Send Message</button>
+    
+    <!-- Form status message -->
+    <div id="form-status" class="form-status" style="margin-top: 1rem;"></div>
+</form>
+        </section>
+    </div>
+    
+    <script>
+        // Simple animation for glass cards when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Add more bubbles dynamically for liquid effect
+        const bubblesContainer = document.querySelector('.bubbles');
+        for (let i = 0; i < 5; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            
+            // Random properties
+            const size = Math.random() * 60 + 20;
+            const left = Math.random() * 100;
+            const duration = Math.random() * 10 + 5;
+            const delay = Math.random() * 5;
+            
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${left}%`;
+            bubble.style.animationDuration = `${duration}s`;
+            bubble.style.animationDelay = `${delay}s`;
+            
+            bubblesContainer.appendChild(bubble);
+        }
+
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const status = document.getElementById('form-status');
+    const button = form.querySelector('button[type="submit"]');
+    
+    // Disable button during submission
+    button.disabled = true;
+    button.textContent = 'Sending...';
+    status.textContent = '';
+    status.style.color = 'inherit';
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            status.textContent = 'Message sent successfully!';
+            status.style.color = '#4BB543'; // Green
+            form.reset();
+        } else {
+            throw new Error('Network response was not ok');
+        }
+    })
+    .catch(error => {
+        status.textContent = 'Oops! There was a problem sending your message.';
+        status.style.color = '#FF3333'; // Red
+        console.error('Error:', error);
+    })
+    .finally(() => {
+        button.disabled = false;
+        button.textContent = 'Send Message';
+    });
+});
+    </script>
+</body>
+</html>
